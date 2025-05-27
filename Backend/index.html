@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JendoubaLife Tourism API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .container {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>JendoubaLife Tourism API</h1>
+  <p>Welcome to the JendoubaLife Tourism API. This API provides information about tourist places, events, reviews, and more in Jendouba, Tunisia.</p>
+  
+  <div class="container">
+    <h2>API Routes</h2>
+    <ul>
+      <li><strong>Users:</strong> /api/users</li>
+      <li><strong>Places:</strong> /api/places</li>
+      <li><strong>Events:</strong> /api/events</li>
+      <li><strong>Reviews:</strong> /api/reviews</li>
+      <li><strong>Reservations:</strong> /api/reservations</li>
+      <li><strong>Promotions:</strong> /api/promotions</li>
+      <li><strong>Messagerie:</strong> /api/messagerie</li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <h2>Reservation Endpoints</h2>
+    <ul>
+      <li><strong>GET /api/reservations</strong> - Get all reservations</li>
+      <li><strong>GET /api/reservations/:id</strong> - Get a specific reservation</li>
+      <li><strong>POST /api/reservations</strong> - Create a new reservation</li>
+      <li><strong>PUT /api/reservations/:id</strong> - Update a reservation</li>
+      <li><strong>DELETE /api/reservations/:id</strong> - Delete a reservation</li>
+      <li><strong>GET /api/reservations/availability</strong> - Check availability</li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <h2>Documentation</h2>
+    <p>For more detailed information about the API, please visit:</p>
+    <ul>
+      <li><a href="/documentation">/documentation</a> - Interactive API documentation</li>
+      <li><a href="/api-docs">/api-docs</a> - API reference</li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,880 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JenCity - Diagramme de Classes</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-bg: #f5f7fa;
+            --border-color: #ddd;
+            --text-color: #333;
+            --success-color: #2ecc71;
+            --table-header-bg: #ebf5fb;
+            --table-alt-row: #f8f9fa;
+            --relationship-color: #9b59b6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .diagram-description {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .entities-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        
+        .entity-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 350px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border-color);
+        }
+        
+        .entity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+        
+        .entity-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .entity-attributes {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .entity-attributes th {
+            background-color: var(--table-header-bg);
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+        
+        .entity-attributes td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .entity-attributes tr:nth-child(even) {
+            background-color: var(--table-alt-row);
+        }
+        
+        .primary-key {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .relationships {
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .relationship-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--relationship-color);
+        }
+        
+        .relationship-list {
+            list-style: none;
+        }
+        
+        .relationship-list li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .relationship-list li:before {
+            content: "→";
+            color: var(--relationship-color);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .diagram-key {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .diagram-key h2 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+        
+        .key-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .key-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        
+        .primary-key-box {
+            background-color: var(--accent-color);
+        }
+        
+        .relationship-box {
+            background-color: var(--relationship-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+        
+        .links-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover {
+            background-color: #2980b9;
+        }
+        
+        @media (max-width: 768px) {
+            .entities-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .entity-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-project-diagram"></i> Diagramme de Classes JenCity</h1>
+            <p class="diagram-description">Représentation structurée des entités et leurs relations dans l'application JenCity</p>
+        </header>
+        
+        <div class="links-nav">
+            <a href="api-documentation.html" class="nav-link">
+                <i class="fas fa-book"></i> Documentation API
+            </a>
+        </div>
+        
+        <div class="diagram-key">
+            <h2>Légende</h2>
+            <div class="key-items">
+                <div class="key-item">
+                    <div class="color-box primary-key-box"></div>
+                    <span>Clé primaire</span>
+                </div>
+                <div class="key-item">
+                    <div class="color-box relationship-box"></div>
+                    <span>Relation entre entités</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="entities-container">
+
+            <div class="entity-card">
+                <div class="entity-header">
+                    User
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">name</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">email</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">password</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">role</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Possède plusieurs Review via userId</li>
+                
+                        <li>Possède plusieurs Message via senderId</li>
+                
+                        <li>Possède plusieurs Message via receiverId</li>
+                
+                        <li>Possède plusieurs Reservation via userId</li>
+                
+                        <li>Possède plusieurs Session via userId1</li>
+                
+                        <li>Possède plusieurs Session via userId2</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Place
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">name</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">type</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">description</td>
+                            <td>text</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">location</td>
+                            <td>object</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">images</td>
+                            <td>array</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">openingHours</td>
+                            <td>object</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">entranceFee</td>
+                            <td>object</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Possède plusieurs Review via placeId</li>
+                
+                        <li>Possède plusieurs Reservation via placeId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Event
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">title</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">description</td>
+                            <td>text</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">startDate</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">endDate</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">location</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">organizer</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">ticketPrice</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">capacity</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">images</td>
+                            <td>array</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Possède plusieurs Reservation via eventId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Message
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">sessionId</td>
+                            <td>number</td>
+                            <td>Référence à Session.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">senderId</td>
+                            <td>number</td>
+                            <td>Référence à User.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">content</td>
+                            <td>text</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">read</td>
+                            <td>boolean</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Appartient à User via senderId</li>
+                
+                        <li>Appartient à Session via sessionId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Session
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">userId1</td>
+                            <td>number</td>
+                            <td>Référence à User.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">userId2</td>
+                            <td>number</td>
+                            <td>Référence à User.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">lastMessageAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">isActive</td>
+                            <td>boolean</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Appartient à User via userId1</li>
+                
+                        <li>Appartient à User via userId2</li>
+                
+                        <li>Possède plusieurs Message via sessionId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Review
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">userId</td>
+                            <td>number</td>
+                            <td>Référence à User.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">placeId</td>
+                            <td>number</td>
+                            <td>Référence à Place.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">rating</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">comment</td>
+                            <td>text</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Appartient à User via userId</li>
+                
+                        <li>Appartient à Place via placeId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+            <div class="entity-card">
+                <div class="entity-header">
+                    Reservation
+                </div>
+                <table class="entity-attributes">
+                    <thead>
+                        <tr>
+                            <th>Attribut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                        <tr>
+                            <td class="primary-key">id</td>
+                            <td>number</td>
+                            <td>Clé primaire</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">userId</td>
+                            <td>number</td>
+                            <td>Référence à User.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">eventId</td>
+                            <td>number</td>
+                            <td>Référence à Event.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">placeId</td>
+                            <td>number</td>
+                            <td>Référence à Place.id</td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">numberOfTickets</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">numberOfPersons</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">totalPrice</td>
+                            <td>number</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">status</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">paymentMethod</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">paymentId</td>
+                            <td>string</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">visitDate</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">createdAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                        <tr>
+                            <td class="">updatedAt</td>
+                            <td>date</td>
+                            <td></td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+        
+                <div class="relationships">
+                    <div class="relationship-title">Relations:</div>
+                    <ul class="relationship-list">
+            
+                        <li>Appartient à User via userId</li>
+                
+                        <li>Appartient à Event via eventId</li>
+                
+                        <li>Appartient à Place via placeId</li>
+                
+                    </ul>
+                </div>
+            
+            </div>
+        
+        </div>
+        
+        <footer>
+            <p>JenCity Diagramme de Classes - Généré le 15/03/2025</p>
+            <p>Version 1.0</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add Font Awesome if not already included
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const fontAwesome = document.createElement('link');
+            fontAwesome.rel = 'stylesheet';
+            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+            document.head.appendChild(fontAwesome);
+        }
+    </script>
+</body>
+</html>

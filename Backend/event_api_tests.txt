@@ -1,0 +1,189 @@
+
+# Event API Tests for Postman
+
+## 1. Get All Events
+- **Method**: GET
+- **URL**: {{base_url}}/api/events
+- **Description**: Retrieve all events with optional filtering
+- **Optional Query Parameters**:
+  - `location`: Filter by location (partial match)
+  - `organizer`: Filter by organizer name
+  - `startDate`: Filter by start date (ISO format)
+  - `endDate`: Filter by end date (ISO format)
+  - `place_id`: Filter by place ID
+
+## 2. Get Upcoming Events
+- **Method**: GET
+- **URL**: {{base_url}}/api/events/upcoming?limit=5
+- **Description**: Get future events ordered by start date
+- **Optional Query Parameters**:
+  - `limit`: Number of events to return (default: 10)
+
+## 3. Get Event by ID
+- **Method**: GET
+- **URL**: {{base_url}}/api/events/1
+- **Description**: Get details of a specific event
+
+## 4. Get Events by Place
+- **Method**: GET
+- **URL**: {{base_url}}/api/events/place/5
+- **Description**: Get all events associated with a specific place
+- **Parameters**:
+  - `placeId`: ID of the place
+
+## 5. Get Events by Provider
+- **Method**: GET
+- **URL**: {{base_url}}/api/events/provider/3
+- **Description**: Get all events associated with places owned by a provider
+- **Parameters**:
+  - `providerId`: ID of the provider user
+
+## 6. Create Event
+- **Method**: POST
+- **URL**: {{base_url}}/api/events
+- **Description**: Create a new event for a specific place
+- **Headers**:
+  - Content-Type: application/json
+- **Body**:
+```json
+{
+  "title": "Summer Music Festival",
+  "description": "A weekend of live music and entertainment in beautiful surroundings",
+  "startDate": "2025-08-15T14:00:00",
+  "endDate": "2025-08-17T22:00:00",
+  "location": "Main Stage",
+  "organizer": "Music Events Inc.",
+  "ticketPrice": 25.50,
+  "capacity": 200,
+  "place_id": 5,
+  "images": [
+    "festival1.jpg",
+    "festival2.jpg"
+  ]
+}
+```
+
+### Create Event - All Possible Attributes
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| title | String | Yes | Name of the event |
+| description | String | Yes | Detailed description of the event |
+| startDate | DateTime | Yes | Start date and time (ISO format) |
+| endDate | DateTime | Yes | End date and time (ISO format) |
+| location | String | Yes | Location name or address of the event |
+| organizer | String | No | Name of the event organizer |
+| ticketPrice | Decimal | No | Price of entry tickets |
+| capacity | Integer | No | Maximum capacity of the event |
+| place_id | Integer | Yes | ID of the place where the event is hosted |
+| images | Array | No | Array of image filenames or URLs |
+
+## 7. Update Event
+- **Method**: PUT
+- **URL**: {{base_url}}/api/events/1
+- **Description**: Update an existing event
+- **Headers**:
+  - Content-Type: application/json
+- **Body** (example with partial update):
+```json
+{
+  "title": "Summer Music Festival - Updated",
+  "capacity": 250,
+  "ticketPrice": 29.99
+}
+```
+
+### Update Event - All Possible Attributes
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| title | String | No | Updated name of the event |
+| description | String | No | Updated detailed description |
+| startDate | DateTime | No | Updated start date and time (ISO format) |
+| endDate | DateTime | No | Updated end date and time (ISO format) |
+| location | String | No | Updated location name or address |
+| organizer | String | No | Updated name of the event organizer |
+| ticketPrice | Decimal | No | Updated price of entry tickets |
+| capacity | Integer | No | Updated maximum capacity |
+| place_id | Integer | No | Updated place ID |
+| images | Array | No | Updated array of image filenames or URLs |
+
+## 8. Delete Event
+- **Method**: DELETE
+- **URL**: {{base_url}}/api/events/1
+- **Description**: Delete an existing event
+
+## Business Rules
+1. Events must have a valid place_id that corresponds to a real place
+2. Start date must be before end date
+3. All dates must be in ISO format (YYYY-MM-DDTHH:MM:SS)
+4. Required fields for creation: title, description, startDate, endDate, location, place_id
+
+## Example: Complete Create Event Request
+```
+POST /api/events
+Host: {{base_url}}
+Content-Type: application/json
+
+{
+  "title": "Wine Tasting Weekend",
+  "description": "Join us for a weekend of wine tasting featuring local wineries and gourmet food pairings. Experts will guide you through various wine regions and their unique characteristics.",
+  "startDate": "2025-09-12T16:00:00",
+  "endDate": "2025-09-13T22:00:00",
+  "location": "Wine Cellar",
+  "organizer": "Gourmet Events Ltd.",
+  "ticketPrice": 45.00,
+  "capacity": 60,
+  "place_id": 5,
+  "images": [
+    "wine_event1.jpg",
+    "wine_event2.jpg",
+    "wine_event3.jpg"
+  ]
+}
+```
+
+## Example: Complete Update Event Request
+```
+PUT /api/events/12
+Host: {{base_url}}
+Content-Type: application/json
+
+{
+  "title": "Premium Wine Tasting Weekend",
+  "description": "Upgraded to feature exclusive wines and premium food pairings. Local wineries will present their award-winning vintages with extended tasting sessions.",
+  "startDate": "2025-09-12T15:00:00",
+  "endDate": "2025-09-14T22:00:00",
+  "location": "Grand Wine Cellar",
+  "organizer": "Gourmet Events Premium",
+  "ticketPrice": 65.00,
+  "capacity": 40,
+  "images": [
+    "premium_wine1.jpg",
+    "premium_wine2.jpg",
+    "premium_wine3.jpg",
+    "premium_wine4.jpg"
+  ]
+}
+```
+
+## Error Responses
+The API will return appropriate HTTP status codes:
+- 200: Success
+- 201: Successfully created
+- 204: Successfully deleted (no content)
+- 400: Bad request (validation errors)
+- 404: Not found
+- 500: Server error
+
+Error response format:
+```json
+{
+  "status": 400,
+  "message": "Error message",
+  "errors": [
+    {
+      "param": "title",
+      "msg": "Title is required"
+    }
+  ]
+}
+```

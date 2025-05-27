@@ -1,0 +1,31 @@
+
+export const COLORS = {
+  primary: '#1B4332', // Dark green
+  primary_light: '#2D6A4F',
+  primary_dark: '#081C15',
+  secondary: '#40916C',
+  secondary_light: '#52B788',
+  tertiary: '#74C69D',
+  tertiary_light: '#95D5B2',
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#808080',
+  gray_light: '#D8D8D8',
+  light_gray: '#F5F5F5',
+  error: '#FF4444',
+  error_light: '#FFDDDD',
+  light_error: 'rgba(255, 68, 68, 0.1)',
+  success: '#4CAF50',
+  success_light: '#E8F5E9',
+  warning: '#FFC107',
+  warning_light: '#FFF8E1',
+  info: '#2196F3',
+  info_light: '#E3F2FD',
+  transparent: 'transparent',
+  overlay: 'rgba(0, 0, 0, 0.5)',
+  card_bg: '#FFFFFF',
+  favorite: '#FF6B6B',
+  inactive: '#CCCCCC',
+  accent: '#FFB347',
+  badge: '#E0F2F1'
+};

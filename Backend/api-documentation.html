@@ -1,0 +1,4625 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JenCity API Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --text-color: #333;
+            --method-get: #61affe;
+            --method-post: #49cc90;
+            --method-put: #fca130;
+            --method-delete: #f93e3e;
+            --success-color: #4caf50;
+            --success-bg: #e8f5e9;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .api-description {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .server-config {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .server-config h2 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+        
+        .server-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .server-form input {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            flex: 1;
+            min-width: 120px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .server-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .server-form button {
+            padding: 10px 18px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .server-form button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .server-form button:active {
+            transform: translateY(0);
+        }
+        
+        .base-url {
+            font-size: 1.1rem;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .filter-container {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+        
+        .filter-title {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .filter-container select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: white;
+            flex-grow: 1;
+            max-width: 300px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+        }
+        
+        .filter-container select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .endpoint-list {
+            margin-bottom: 40px;
+        }
+        
+        .endpoint {
+            margin-bottom: 25px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .endpoint:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            padding: 15px;
+            background-color: #f5f7f9;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .method {
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .method.get { background-color: var(--method-get); }
+        .method.post { background-color: var(--method-post); }
+        .method.put { background-color: var(--method-put); }
+        .method.delete { background-color: var(--method-delete); }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            flex-grow: 1;
+            position: relative;
+            padding: 8px 15px;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .endpoint-body {
+            padding: 20px;
+        }
+        
+        .endpoint-description {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.7;
+        }
+        
+        .params-section, .body-section, .response-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            color: var(--primary-color);
+        }
+        
+        .param-table, .response-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .param-table th, .response-table th {
+            background-color: #f5f7f9;
+            text-align: left;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .param-table td, .response-table td {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .param-table tr:nth-child(even), .response-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .code-block {
+            background-color: #f5f7f9;
+            padding: 15px;
+            border-radius: 6px;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        
+        .response-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-right: 10px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .status-success {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+        }
+        
+        .status-error {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .status-warning {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+        
+        .entity-title {
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .entity-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast i {
+            font-size: 1.2rem;
+        }
+        
+        .endpoint-counter {
+            font-size: 0.9rem;
+            color: #666;
+            margin-left: 10px;
+        }
+        
+        .try-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .try-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .links-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-link:hover {
+            background-color: #2980b9;
+        }
+        
+        @media (max-width: 768px) {
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .endpoint-path {
+                width: 100%;
+            }
+            
+            .server-form {
+                flex-direction: column;
+            }
+            
+            .method {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* Tabs for request/response */
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #f5f7f9;
+            border-color: var(--border-color);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Icons for endpoints */
+        .entity-users-icon::before { content: "\f007"; }
+        .entity-places-icon::before { content: "\f3c5"; }
+        .entity-events-icon::before { content: "\f073"; }
+        .entity-messages-icon::before { content: "\f4ad"; }
+        .entity-reviews-icon::before { content: "\f005"; }
+        .entity-reservations-icon::before { content: "\f145"; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> JenCity API Documentation</h1>
+            <p class="api-description">Documentation complète des API pour l'application JenCity</p>
+        </header>
+        
+        <div class="links-nav">
+            <a href="diagram_de_class.html" class="nav-link">
+                <i class="fas fa-project-diagram"></i> Diagramme de Classes
+            </a>
+        </div>
+        
+        <div class="server-config">
+            <h2><i class="fas fa-server"></i> Configuration du Serveur</h2>
+            <div class="server-form">
+                <input type="text" id="serverHost" placeholder="Hôte (ex: localhost)" value="localhost">
+                <input type="number" id="serverPort" placeholder="Port (ex: 3000)" value="3000">
+                <button id="updateServerBtn"><i class="fas fa-sync-alt"></i> Mettre à jour</button>
+            </div>
+            <div class="base-url">
+                <span id="baseUrlDisplay">http://localhost:3000/api</span>
+                <button class="copy-btn" id="copyBaseUrlBtn"><i class="fas fa-copy"></i> Copier</button>
+            </div>
+        </div>
+        
+        <div class="filter-container">
+            <div class="filter-title"><i class="fas fa-filter"></i> Filtrer les API</div>
+            <div class="filter-options">
+                <select id="entityFilter">
+                    <option value="all">Toutes les entités</option>
+                    <option value="users">Users</option><option value="places">Places</option><option value="events">Events</option><option value="sessions">Sessions</option><option value="messages">Messages</option><option value="reviews">Reviews</option><option value="reservations">Reservations</option>
+                </select>
+                <select id="methodFilter">
+                    <option value="all">Toutes les méthodes</option>
+                    <option value="get">GET</option>
+                    <option value="post">POST</option>
+                    <option value="put">PUT</option>
+                    <option value="delete">DELETE</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="endpoint-list">
+
+            <h2 class="entity-title" id="entity-users">
+                <span class="entity-icon"><i class="fas fa-users"></i></span>
+                Users
+                <span class="endpoint-counter">(7 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="users">
+      
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/users/login</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users/login')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/users/login')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Authentifie un utilisateur existant.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--users-login')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--users-login')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--users-login" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "email": "john@example.com",
+  "password": "securepassword123"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "email": "john@example.com",
+  "password": "securepassword123"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--users-login" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2023-06-15T10:30:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2023-06-15T10:30:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/users/register</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users/register')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/users/register')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Enregistre un nouvel utilisateur.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--users-register')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--users-register')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--users-register" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "name": "New User",
+  "email": "newuser@example.com",
+  "password": "securepassword123"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "name": "New User",
+  "email": "newuser@example.com",
+  "password": "securepassword123"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--users-register" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "user": {
+    "id": 3,
+    "name": "New User",
+    "email": "newuser@example.com",
+    "role": "user",
+    "createdAt": "2023-08-20T15:45:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "user": {
+    "id": 3,
+    "name": "New User",
+    "email": "newuser@example.com",
+    "role": "user",
+    "createdAt": "2023-08-20T15:45:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/users</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/users')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de tous les utilisateurs avec leurs informations de base comme le nom, l'email et le rôle.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--users')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--users')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--users" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--users" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "user"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "role": "admin"
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "user"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "role": "admin"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/users/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/users/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère les informations détaillées d'un utilisateur en fonction de son identifiant unique.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'utilisateur</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--users-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--users-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--users-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--users-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2023-06-15T10:30:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2023-06-15T10:30:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/users</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/users')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Crée un nouvel utilisateur dans la base de données avec un rôle par défaut "user".
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--users')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--users')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--users" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "name": "New User",
+  "email": "newuser@example.com",
+  "password": "securepassword123"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "name": "New User",
+  "email": "newuser@example.com",
+  "password": "securepassword123"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--users" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "name": "New User",
+    "email": "newuser@example.com",
+    "role": "user",
+    "createdAt": "2023-08-20T15:45:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "name": "New User",
+    "email": "newuser@example.com",
+    "role": "user",
+    "createdAt": "2023-08-20T15:45:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/users/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/users/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Modifie les informations d'un utilisateur existant comme le nom et l'email.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'utilisateur</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--users-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--users-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--users-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "name": "Updated Name",
+  "email": "updated@example.com"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "name": "Updated Name",
+  "email": "updated@example.com"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--users-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Updated Name",
+    "email": "updated@example.com",
+    "role": "user",
+    "updatedAt": "2023-08-21T09:12:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Updated Name",
+    "email": "updated@example.com",
+    "role": "user",
+    "updatedAt": "2023-08-21T09:12:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/users/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/users/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/users/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime définitivement un utilisateur de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'utilisateur</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--users-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--users-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--users-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--users-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "User deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "User deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-places">
+                <span class="entity-icon"><i class="fas fa-map-marker-alt"></i></span>
+                Places
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="places">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/places</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/places')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/places')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de tous les lieux touristiques disponibles incluant leur nom, type, emplacement et description.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--places')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--places')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--places" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--places" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "Bulla Regia",
+      "type": "historical",
+      "location": {
+        "latitude": 36.5594,
+        "longitude": 8.7553
+      },
+      "description": "Ancient Roman city with unique underground villas"
+    },
+    {
+      "id": 2,
+      "name": "Ain Draham",
+      "type": "natural",
+      "location": {
+        "latitude": 36.7828,
+        "longitude": 8.6875
+      },
+      "description": "Mountain town known for its forests and cool climate"
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "Bulla Regia",
+      "type": "historical",
+      "location": {
+        "latitude": 36.5594,
+        "longitude": 8.7553
+      },
+      "description": "Ancient Roman city with unique underground villas"
+    },
+    {
+      "id": 2,
+      "name": "Ain Draham",
+      "type": "natural",
+      "location": {
+        "latitude": 36.7828,
+        "longitude": 8.6875
+      },
+      "description": "Mountain town known for its forests and cool climate"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/places/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/places/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/places/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère les informations détaillées d'un lieu touristique incluant les images, horaires, tarifs et autres informations pratiques.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du lieu</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--places-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--places-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--places-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--places-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Bulla Regia",
+    "type": "historical",
+    "location": {
+      "latitude": 36.5594,
+      "longitude": 8.7553
+    },
+    "description": "Ancient Roman city with unique underground villas",
+    "images": [
+      "https://example.com/bulla-regia-1.jpg",
+      "https://example.com/bulla-regia-2.jpg"
+    ],
+    "openingHours": {
+      "monday": "9:00 - 17:00",
+      "tuesday": "9:00 - 17:00",
+      "wednesday": "9:00 - 17:00",
+      "thursday": "9:00 - 17:00",
+      "friday": "9:00 - 17:00",
+      "saturday": "9:00 - 17:00",
+      "sunday": "9:00 - 17:00"
+    },
+    "entranceFee": {
+      "adult": 10,
+      "child": 5,
+      "student": 7,
+      "senior": 7
+    }
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Bulla Regia",
+    "type": "historical",
+    "location": {
+      "latitude": 36.5594,
+      "longitude": 8.7553
+    },
+    "description": "Ancient Roman city with unique underground villas",
+    "images": [
+      "https://example.com/bulla-regia-1.jpg",
+      "https://example.com/bulla-regia-2.jpg"
+    ],
+    "openingHours": {
+      "monday": "9:00 - 17:00",
+      "tuesday": "9:00 - 17:00",
+      "wednesday": "9:00 - 17:00",
+      "thursday": "9:00 - 17:00",
+      "friday": "9:00 - 17:00",
+      "saturday": "9:00 - 17:00",
+      "sunday": "9:00 - 17:00"
+    },
+    "entranceFee": {
+      "adult": 10,
+      "child": 5,
+      "student": 7,
+      "senior": 7
+    }
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/places</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/places')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/places')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Crée un nouveau lieu touristique dans la base de données avec ses informations de base.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--places')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--places')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--places" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "name": "New Place",
+  "type": "cultural",
+  "location": {
+    "latitude": 36.5,
+    "longitude": 8.8
+  },
+  "description": "A new cultural attraction"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "name": "New Place",
+  "type": "cultural",
+  "location": {
+    "latitude": 36.5,
+    "longitude": 8.8
+  },
+  "description": "A new cultural attraction"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--places" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "name": "New Place",
+    "type": "cultural",
+    "location": {
+      "latitude": 36.5,
+      "longitude": 8.8
+    },
+    "description": "A new cultural attraction",
+    "createdAt": "2023-08-22T11:30:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "name": "New Place",
+    "type": "cultural",
+    "location": {
+      "latitude": 36.5,
+      "longitude": 8.8
+    },
+    "description": "A new cultural attraction",
+    "createdAt": "2023-08-22T11:30:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/places/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/places/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/places/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Met à jour les informations d'un lieu touristique existant.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du lieu</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--places-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--places-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--places-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "name": "Updated Place",
+  "type": "historical",
+  "description": "Updated description for this attraction"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "name": "Updated Place",
+  "type": "historical",
+  "description": "Updated description for this attraction"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--places-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Updated Place",
+    "type": "historical",
+    "location": {
+      "latitude": 36.5594,
+      "longitude": 8.7553
+    },
+    "description": "Updated description for this attraction",
+    "updatedAt": "2023-08-23T14:20:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "name": "Updated Place",
+    "type": "historical",
+    "location": {
+      "latitude": 36.5594,
+      "longitude": 8.7553
+    },
+    "description": "Updated description for this attraction",
+    "updatedAt": "2023-08-23T14:20:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/places/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/places/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/places/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime un lieu touristique de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du lieu</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--places-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--places-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--places-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--places-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Place deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Place deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-events">
+                <span class="entity-icon"><i class="fas fa-calendar-alt"></i></span>
+                Events
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="events">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/events</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/events')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/events')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de tous les événements programmés incluant leur titre, description, dates et emplacement.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--events')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--events')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--events" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--events" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "title": "Cultural Festival",
+      "description": "Annual cultural festival in Jendouba",
+      "startDate": "2023-09-15T18:00:00Z",
+      "endDate": "2023-09-17T22:00:00Z",
+      "location": "Jendouba City Center"
+    },
+    {
+      "id": 2,
+      "title": "Hiking Trip",
+      "description": "Guided hiking trip in Ain Draham mountains",
+      "startDate": "2023-10-05T09:00:00Z",
+      "endDate": "2023-10-05T16:00:00Z",
+      "location": "Ain Draham"
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "title": "Cultural Festival",
+      "description": "Annual cultural festival in Jendouba",
+      "startDate": "2023-09-15T18:00:00Z",
+      "endDate": "2023-09-17T22:00:00Z",
+      "location": "Jendouba City Center"
+    },
+    {
+      "id": 2,
+      "title": "Hiking Trip",
+      "description": "Guided hiking trip in Ain Draham mountains",
+      "startDate": "2023-10-05T09:00:00Z",
+      "endDate": "2023-10-05T16:00:00Z",
+      "location": "Ain Draham"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/events/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/events/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/events/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère les détails d'un événement spécifique.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'événement</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--events-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--events-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--events-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--events-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "title": "Cultural Festival",
+    "description": "Annual cultural festival in Jendouba with local artists and traditional food",
+    "startDate": "2023-09-15T18:00:00Z",
+    "endDate": "2023-09-17T22:00:00Z",
+    "location": "Jendouba City Center",
+    "organizer": "Jendouba Cultural Association",
+    "ticketPrice": 10,
+    "capacity": 500,
+    "images": [
+      "https://example.com/festival1.jpg",
+      "https://example.com/festival2.jpg"
+    ]
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "title": "Cultural Festival",
+    "description": "Annual cultural festival in Jendouba with local artists and traditional food",
+    "startDate": "2023-09-15T18:00:00Z",
+    "endDate": "2023-09-17T22:00:00Z",
+    "location": "Jendouba City Center",
+    "organizer": "Jendouba Cultural Association",
+    "ticketPrice": 10,
+    "capacity": 500,
+    "images": [
+      "https://example.com/festival1.jpg",
+      "https://example.com/festival2.jpg"
+    ]
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/events</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/events')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/events')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Crée un nouvel événement dans la base de données.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--events')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--events')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--events" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "title": "New Event",
+  "description": "Description of the new event",
+  "startDate": "2023-11-10T19:00:00Z",
+  "endDate": "2023-11-10T23:00:00Z",
+  "location": "Bulla Regia Site"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "title": "New Event",
+  "description": "Description of the new event",
+  "startDate": "2023-11-10T19:00:00Z",
+  "endDate": "2023-11-10T23:00:00Z",
+  "location": "Bulla Regia Site"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--events" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "title": "New Event",
+    "description": "Description of the new event",
+    "startDate": "2023-11-10T19:00:00Z",
+    "endDate": "2023-11-10T23:00:00Z",
+    "location": "Bulla Regia Site",
+    "createdAt": "2023-08-24T10:15:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "title": "New Event",
+    "description": "Description of the new event",
+    "startDate": "2023-11-10T19:00:00Z",
+    "endDate": "2023-11-10T23:00:00Z",
+    "location": "Bulla Regia Site",
+    "createdAt": "2023-08-24T10:15:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/events/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/events/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/events/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Met à jour les informations d'un événement existant.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'événement</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--events-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--events-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--events-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "title": "Updated Event Title",
+  "description": "Updated event description",
+  "location": "New location"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "title": "Updated Event Title",
+  "description": "Updated event description",
+  "location": "New location"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--events-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "title": "Updated Event Title",
+    "description": "Updated event description",
+    "startDate": "2023-09-15T18:00:00Z",
+    "endDate": "2023-09-17T22:00:00Z",
+    "location": "New location",
+    "updatedAt": "2023-08-25T11:20:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "title": "Updated Event Title",
+    "description": "Updated event description",
+    "startDate": "2023-09-15T18:00:00Z",
+    "endDate": "2023-09-17T22:00:00Z",
+    "location": "New location",
+    "updatedAt": "2023-08-25T11:20:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/events/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/events/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/events/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime un événement de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'événement</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--events-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--events-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--events-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--events-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Event deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Event deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-sessions">
+                <span class="entity-icon"><i class="fas fa-code"></i></span>
+                Sessions
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="sessions">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/sessions</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/sessions')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/sessions')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de toutes les sessions de messages d'un utilisateur.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--sessions')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--sessions')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--sessions" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--sessions" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId1": 1,
+      "userId2": 2,
+      "lastMessageAt": "2023-08-15T14:35:00Z",
+      "isActive": true,
+      "createdAt": "2023-08-15T14:30:00Z",
+      "user": {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane@example.com"
+      },
+      "lastMessage": {
+        "content": "Bien sûr, comment puis-je vous aider?",
+        "senderId": 2,
+        "createdAt": "2023-08-15T14:35:00Z"
+      }
+    },
+    {
+      "id": 2,
+      "userId1": 1,
+      "userId2": 3,
+      "lastMessageAt": "2023-08-26T16:40:00Z",
+      "isActive": true,
+      "createdAt": "2023-08-26T16:40:00Z",
+      "user": {
+        "id": 3,
+        "name": "New User",
+        "email": "newuser@example.com"
+      },
+      "lastMessage": {
+        "content": "Je voudrais plus d'informations sur l'événement du 15 septembre.",
+        "senderId": 1,
+        "createdAt": "2023-08-26T16:40:00Z"
+      }
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId1": 1,
+      "userId2": 2,
+      "lastMessageAt": "2023-08-15T14:35:00Z",
+      "isActive": true,
+      "createdAt": "2023-08-15T14:30:00Z",
+      "user": {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane@example.com"
+      },
+      "lastMessage": {
+        "content": "Bien sûr, comment puis-je vous aider?",
+        "senderId": 2,
+        "createdAt": "2023-08-15T14:35:00Z"
+      }
+    },
+    {
+      "id": 2,
+      "userId1": 1,
+      "userId2": 3,
+      "lastMessageAt": "2023-08-26T16:40:00Z",
+      "isActive": true,
+      "createdAt": "2023-08-26T16:40:00Z",
+      "user": {
+        "id": 3,
+        "name": "New User",
+        "email": "newuser@example.com"
+      },
+      "lastMessage": {
+        "content": "Je voudrais plus d'informations sur l'événement du 15 septembre.",
+        "senderId": 1,
+        "createdAt": "2023-08-26T16:40:00Z"
+      }
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/sessions/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/sessions/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/sessions/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère les détails d'une session de messages spécifique.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la session</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--sessions-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--sessions-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--sessions-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--sessions-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId1": 1,
+    "userId2": 2,
+    "lastMessageAt": "2023-08-15T14:35:00Z",
+    "isActive": true,
+    "createdAt": "2023-08-15T14:30:00Z",
+    "user1": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "user2": {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com"
+    },
+    "messages": [
+      {
+        "id": 1,
+        "sessionId": 1,
+        "senderId": 1,
+        "content": "Bonjour, j'ai une question sur Bulla Regia.",
+        "createdAt": "2023-08-15T14:30:00Z",
+        "read": true
+      },
+      {
+        "id": 2,
+        "sessionId": 1,
+        "senderId": 2,
+        "content": "Bien sûr, comment puis-je vous aider?",
+        "createdAt": "2023-08-15T14:35:00Z",
+        "read": false
+      }
+    ]
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId1": 1,
+    "userId2": 2,
+    "lastMessageAt": "2023-08-15T14:35:00Z",
+    "isActive": true,
+    "createdAt": "2023-08-15T14:30:00Z",
+    "user1": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "user2": {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com"
+    },
+    "messages": [
+      {
+        "id": 1,
+        "sessionId": 1,
+        "senderId": 1,
+        "content": "Bonjour, j'ai une question sur Bulla Regia.",
+        "createdAt": "2023-08-15T14:30:00Z",
+        "read": true
+      },
+      {
+        "id": 2,
+        "sessionId": 1,
+        "senderId": 2,
+        "content": "Bien sûr, comment puis-je vous aider?",
+        "createdAt": "2023-08-15T14:35:00Z",
+        "read": false
+      }
+    ]
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/sessions</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/sessions')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/sessions')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Crée une nouvelle session de messages entre deux utilisateurs.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--sessions')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--sessions')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--sessions" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "userId1": 1,
+  "userId2": 3
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "userId1": 1,
+  "userId2": 3
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--sessions" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId1": 1,
+    "userId2": 3,
+    "lastMessageAt": null,
+    "isActive": true,
+    "createdAt": "2023-08-27T09:45:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId1": 1,
+    "userId2": 3,
+    "lastMessageAt": null,
+    "isActive": true,
+    "createdAt": "2023-08-27T09:45:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/sessions/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/sessions/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/sessions/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Met à jour les informations d'une session de messages.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la session</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--sessions-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--sessions-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--sessions-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "isActive": false
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "isActive": false
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--sessions-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId1": 1,
+    "userId2": 2,
+    "lastMessageAt": "2023-08-15T14:35:00Z",
+    "isActive": false,
+    "updatedAt": "2023-08-27T14:10:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId1": 1,
+    "userId2": 2,
+    "lastMessageAt": "2023-08-15T14:35:00Z",
+    "isActive": false,
+    "updatedAt": "2023-08-27T14:10:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/sessions/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/sessions/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/sessions/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime une session de messages de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la session</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--sessions-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--sessions-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--sessions-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--sessions-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Session deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Session deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-messages">
+                <span class="entity-icon"><i class="fas fa-comments"></i></span>
+                Messages
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="messages">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/messages</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/messages')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/messages')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de tous les messages envoyés dans l'application JenCity.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--messages')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--messages')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--messages" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--messages" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "sessionId": 1,
+      "senderId": 1,
+      "content": "Bonjour, j'ai une question sur Bulla Regia.",
+      "createdAt": "2023-08-15T14:30:00Z",
+      "read": true
+    },
+    {
+      "id": 2,
+      "sessionId": 1,
+      "senderId": 2,
+      "content": "Bien sûr, comment puis-je vous aider?",
+      "createdAt": "2023-08-15T14:35:00Z",
+      "read": false
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "sessionId": 1,
+      "senderId": 1,
+      "content": "Bonjour, j'ai une question sur Bulla Regia.",
+      "createdAt": "2023-08-15T14:30:00Z",
+      "read": true
+    },
+    {
+      "id": 2,
+      "sessionId": 1,
+      "senderId": 2,
+      "content": "Bien sûr, comment puis-je vous aider?",
+      "createdAt": "2023-08-15T14:35:00Z",
+      "read": false
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/messages/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/messages/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/messages/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère un message spécifique par son identifiant.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du message</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--messages-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--messages-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--messages-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--messages-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "sessionId": 1,
+    "senderId": 1,
+    "content": "Bonjour, j'ai une question sur Bulla Regia.",
+    "createdAt": "2023-08-15T14:30:00Z",
+    "read": true
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "sessionId": 1,
+    "senderId": 1,
+    "content": "Bonjour, j'ai une question sur Bulla Regia.",
+    "createdAt": "2023-08-15T14:30:00Z",
+    "read": true
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/messages</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/messages')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/messages')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Envoie un nouveau message à un utilisateur.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--messages')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--messages')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--messages" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "sessionId": 1,
+  "senderId": 1,
+  "content": "Je voudrais plus d'informations sur l'événement du 15 septembre."
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "sessionId": 1,
+  "senderId": 1,
+  "content": "Je voudrais plus d'informations sur l'événement du 15 septembre."
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--messages" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "sessionId": 1,
+    "senderId": 1,
+    "content": "Je voudrais plus d'informations sur l'événement du 15 septembre.",
+    "createdAt": "2023-08-26T16:40:00Z",
+    "read": false
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "sessionId": 1,
+    "senderId": 1,
+    "content": "Je voudrais plus d'informations sur l'événement du 15 septembre.",
+    "createdAt": "2023-08-26T16:40:00Z",
+    "read": false
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/messages/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/messages/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/messages/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Met à jour le statut de lecture d'un message.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du message</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--messages-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--messages-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--messages-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "read": true
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "read": true
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--messages-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "sessionId": 1,
+    "senderId": 2,
+    "content": "Bien sûr, comment puis-je vous aider?",
+    "createdAt": "2023-08-15T14:35:00Z",
+    "read": true,
+    "updatedAt": "2023-08-26T17:05:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "sessionId": 1,
+    "senderId": 2,
+    "content": "Bien sûr, comment puis-je vous aider?",
+    "createdAt": "2023-08-15T14:35:00Z",
+    "read": true,
+    "updatedAt": "2023-08-26T17:05:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/messages/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/messages/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/messages/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime un message de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique du message</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--messages-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--messages-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--messages-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--messages-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Message deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Message deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-reviews">
+                <span class="entity-icon"><i class="fas fa-star"></i></span>
+                Reviews
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="reviews">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/reviews</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reviews')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/reviews')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de toutes les avis et évaluations sur les lieux touristiques.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--reviews')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--reviews')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--reviews" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--reviews" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId": 1,
+      "placeId": 1,
+      "rating": 5,
+      "comment": "Un site historique fascinant, je recommande vivement!",
+      "createdAt": "2023-07-20T10:15:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "placeId": 2,
+      "rating": 4,
+      "comment": "Très beau paysage, mais un peu difficile d'accès.",
+      "createdAt": "2023-08-05T16:30:00Z"
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId": 1,
+      "placeId": 1,
+      "rating": 5,
+      "comment": "Un site historique fascinant, je recommande vivement!",
+      "createdAt": "2023-07-20T10:15:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "placeId": 2,
+      "rating": 4,
+      "comment": "Très beau paysage, mais un peu difficile d'accès.",
+      "createdAt": "2023-08-05T16:30:00Z"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/reviews/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reviews/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/reviews/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère un avis spécifique par son identifiant.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'avis</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--reviews-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--reviews-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--reviews-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--reviews-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId": 1,
+    "placeId": 1,
+    "rating": 5,
+    "comment": "Un site historique fascinant, je recommande vivement!",
+    "createdAt": "2023-07-20T10:15:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId": 1,
+    "placeId": 1,
+    "rating": 5,
+    "comment": "Un site historique fascinant, je recommande vivement!",
+    "createdAt": "2023-07-20T10:15:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/reviews</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reviews')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/reviews')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Ajoute un nouvel avis sur un lieu touristique.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--reviews')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--reviews')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--reviews" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "userId": 3,
+  "placeId": 1,
+  "rating": 4,
+  "comment": "Très intéressant, bonne visite guidée."
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "userId": 3,
+  "placeId": 1,
+  "rating": 4,
+  "comment": "Très intéressant, bonne visite guidée."
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--reviews" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId": 3,
+    "placeId": 1,
+    "rating": 4,
+    "comment": "Très intéressant, bonne visite guidée.",
+    "createdAt": "2023-08-27T09:45:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId": 3,
+    "placeId": 1,
+    "rating": 4,
+    "comment": "Très intéressant, bonne visite guidée.",
+    "createdAt": "2023-08-27T09:45:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/reviews/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reviews/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/reviews/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Modifie un avis existant.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'avis</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--reviews-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--reviews-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--reviews-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "rating": 5,
+  "comment": "J'ai changé d'avis, c'était vraiment excellent!"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "rating": 5,
+  "comment": "J'ai changé d'avis, c'était vraiment excellent!"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--reviews-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "userId": 2,
+    "placeId": 2,
+    "rating": 5,
+    "comment": "J'ai changé d'avis, c'était vraiment excellent!",
+    "createdAt": "2023-08-05T16:30:00Z",
+    "updatedAt": "2023-08-27T14:10:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "userId": 2,
+    "placeId": 2,
+    "rating": 5,
+    "comment": "J'ai changé d'avis, c'était vraiment excellent!",
+    "createdAt": "2023-08-05T16:30:00Z",
+    "updatedAt": "2023-08-27T14:10:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/reviews/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reviews/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/reviews/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Supprime un avis de la base de données.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de l'avis</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--reviews-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--reviews-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--reviews-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--reviews-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Review deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Review deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+            <h2 class="entity-title" id="entity-reservations">
+                <span class="entity-icon"><i class="fas fa-ticket-alt"></i></span>
+                Reservations
+                <span class="endpoint-counter">(5 endpoints)</span>
+            </h2>
+            <div class="entity-group" data-entity="reservations">
+      
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/reservations</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reservations')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/reservations')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère la liste de toutes les réservations d'événements ou de visites.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--reservations')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--reservations')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--reservations" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--reservations" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId": 1,
+      "eventId": 1,
+      "numberOfTickets": 2,
+      "totalPrice": 20,
+      "status": "confirmed",
+      "createdAt": "2023-08-10T11:20:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "placeId": 1,
+      "visitDate": "2023-09-20T10:00:00Z",
+      "numberOfPersons": 3,
+      "totalPrice": 30,
+      "status": "pending",
+      "createdAt": "2023-08-15T09:45:00Z"
+    }
+  ]
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "userId": 1,
+      "eventId": 1,
+      "numberOfTickets": 2,
+      "totalPrice": 20,
+      "status": "confirmed",
+      "createdAt": "2023-08-10T11:20:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "placeId": 1,
+      "visitDate": "2023-09-20T10:00:00Z",
+      "numberOfPersons": 3,
+      "totalPrice": 30,
+      "status": "pending",
+      "createdAt": "2023-08-15T09:45:00Z"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="get">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-path">
+                            <span>/api/reservations/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reservations/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('GET', '/api/reservations/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Récupère les détails d'une réservation spécifique.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la réservation</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-get--reservations-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-get--reservations-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-get--reservations-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-get--reservations-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId": 1,
+    "eventId": 1,
+    "numberOfTickets": 2,
+    "totalPrice": 20,
+    "status": "confirmed",
+    "createdAt": "2023-08-10T11:20:00Z",
+    "paymentMethod": "credit card",
+    "paymentId": "pay_1234567"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 1,
+    "userId": 1,
+    "eventId": 1,
+    "numberOfTickets": 2,
+    "totalPrice": 20,
+    "status": "confirmed",
+    "createdAt": "2023-08-10T11:20:00Z",
+    "paymentMethod": "credit card",
+    "paymentId": "pay_1234567"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="post">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-path">
+                            <span>/api/reservations</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reservations')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('POST', '/api/reservations')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Crée une nouvelle réservation pour un événement ou une visite.
+                        </div>
+        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-post--reservations')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-post--reservations')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-post--reservations" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "userId": 3,
+  "eventId": 2,
+  "numberOfTickets": 1,
+  "paymentMethod": "paypal"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "userId": 3,
+  "eventId": 2,
+  "numberOfTickets": 1,
+  "paymentMethod": "paypal"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-post--reservations" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 201
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId": 3,
+    "eventId": 2,
+    "numberOfTickets": 1,
+    "totalPrice": 10,
+    "status": "pending",
+    "paymentMethod": "paypal",
+    "createdAt": "2023-08-28T15:30:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 201,
+  "data": {
+    "id": 3,
+    "userId": 3,
+    "eventId": 2,
+    "numberOfTickets": 1,
+    "totalPrice": 10,
+    "status": "pending",
+    "paymentMethod": "paypal",
+    "createdAt": "2023-08-28T15:30:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="put">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-path">
+                            <span>/api/reservations/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reservations/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('PUT', '/api/reservations/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Met à jour le statut ou les détails d'une réservation.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la réservation</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'request-put--reservations-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab " onclick="switchTab(this, 'response-put--reservations-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-put--reservations-:id" class="tab-content active">
+        
+                            <div class="body-section">
+                                <h3 class="section-title"><i class="fas fa-file-code"></i> Corps de la Requête</h3>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": "confirmed",
+  "paymentId": "pay_9876543"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": "confirmed",
+  "paymentId": "pay_9876543"
+}</code></pre>
+                                </div>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-put--reservations-:id" class="tab-content ">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 200
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "userId": 2,
+    "placeId": 1,
+    "visitDate": "2023-09-20T10:00:00Z",
+    "numberOfPersons": 3,
+    "totalPrice": 30,
+    "status": "confirmed",
+    "paymentId": "pay_9876543",
+    "updatedAt": "2023-08-28T16:15:00Z"
+  }
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 200,
+  "data": {
+    "id": 2,
+    "userId": 2,
+    "placeId": 1,
+    "visitDate": "2023-09-20T10:00:00Z",
+    "numberOfPersons": 3,
+    "totalPrice": 30,
+    "status": "confirmed",
+    "paymentId": "pay_9876543",
+    "updatedAt": "2023-08-28T16:15:00Z"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="endpoint" data-method="delete">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <span>/api/reservations/:id</span>
+                            <button class="copy-btn" onclick="copyToClipboard('/api/reservations/:id')"><i class="fas fa-copy"></i> Copier</button>
+                        </div>
+                        <button class="try-btn" onclick="prepareForPostman('DELETE', '/api/reservations/:id')">
+                            <i class="fas fa-play"></i> Tester dans Postman
+                        </button>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            Annule et supprime une réservation.
+                        </div>
+        
+                        <div class="params-section">
+                            <h3 class="section-title"><i class="fas fa-list-ul"></i> Paramètres</h3>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Obligatoire</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+          
+                                    <tr>
+                                        <td>id</td>
+                                        <td>number</td>
+                                        <td><i class="fas fa-check" style="color: var(--success-color);"></i></td>
+                                        <td>L'identifiant unique de la réservation</td>
+                                    </tr>
+            
+                                </tbody>
+                            </table>
+                        </div>
+          
+                        <div class="tabs">
+                            <div class="tab " onclick="switchTab(this, 'request-delete--reservations-:id')">
+                                <i class="fas fa-paper-plane"></i> Requête
+                            </div>
+                            <div class="tab active" onclick="switchTab(this, 'response-delete--reservations-:id')">
+                                <i class="fas fa-reply"></i> Réponse
+                            </div>
+                        </div>
+        
+                        <div id="request-delete--reservations-:id" class="tab-content ">
+        
+                            <div class="body-section">
+                                <p>Aucun corps de requête nécessaire pour cette méthode.</p>
+                            </div>
+          
+                        </div>
+        
+                        <div id="response-delete--reservations-:id" class="tab-content active">
+                            <div class="response-section">
+                                <h3 class="section-title"><i class="fas fa-reply-all"></i> Réponse</h3>
+        
+                                <div class="response-status status-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status: 204
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span>JSON</span>
+                                        <button class="copy-btn" onclick="copyToClipboard('{
+  "status": 204,
+  "message": "Reservation cancelled and deleted successfully"
+}')">
+                                            <i class="fas fa-copy"></i> Copier
+                                        </button>
+                                    </div>
+                                    <pre><code>{
+  "status": 204,
+  "message": "Reservation cancelled and deleted successfully"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+      
+        </div>
+        
+        <footer>
+            <p>JenCity API Documentation - Généré le 15/03/2025</p>
+            <p>Version 1.0</p>
+        </footer>
+    </div>
+    
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message"></span>
+    </div>
+    
+    <script>
+        // Copy to clipboard functionality
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            // Show toast notification
+            showToast('API copiée avec succès!');
+        }
+        
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Prepare for Postman
+        function prepareForPostman(method, url) {
+            const baseUrl = document.getElementById('baseUrlDisplay').textContent;
+            const fullUrl = baseUrl.substring(0, baseUrl.indexOf('/api')) + url;
+            
+            // Create Postman collection JSON
+            const postmanCollection = {
+                "info": {
+                    "name": "JenCity API - " + url,
+                    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+                },
+                "item": [
+                    {
+                        "name": method + " " + url,
+                        "request": {
+                            "method": method,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "url": {
+                                "raw": fullUrl,
+                                "protocol": fullUrl.startsWith("https") ? "https" : "http",
+                                "host": fullUrl.replace(/^https?:\/\//, '').split('/')[0].split(':')[0].split('.'),
+                                "port": baseUrl.split(':')[2] ? baseUrl.split(':')[2].split('/')[0] : "",
+                                "path": fullUrl.replace(/^https?:\/\/[^\/]+/, '').split('/').filter(p => p)
+                            }
+                        }
+                    }
+                ]
+            };
+            
+            // Create a data URI for the Postman collection
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(postmanCollection));
+            
+            // Create a link to download the collection
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "JenCity_API_" + url.replace(/\//g, '_') + ".postman_collection.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            showToast('Collection Postman créée!');
+        }
+        
+        // Server configuration update
+        document.getElementById('updateServerBtn').addEventListener('click', function() {
+            const host = document.getElementById('serverHost').value || 'localhost';
+            const port = document.getElementById('serverPort').value || '3000';
+            const baseUrl = `http://${host}:${port}/api`;
+            document.getElementById('baseUrlDisplay').textContent = baseUrl;
+            
+            showToast('Configuration du serveur mise à jour!');
+        });
+        
+        // Copy base URL
+        document.getElementById('copyBaseUrlBtn').addEventListener('click', function() {
+            copyToClipboard(document.getElementById('baseUrlDisplay').textContent);
+        });
+        
+        // Switch tabs
+        function switchTab(tabElement, contentId) {
+            // Remove active class from all tabs in the same group
+            const tabContainer = tabElement.parentElement;
+            const tabs = tabContainer.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            tabElement.classList.add('active');
+            
+            // Hide all tab content in the same endpoint
+            const endpoint = tabContainer.closest('.endpoint');
+            const tabContents = endpoint.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById(contentId).classList.add('active');
+        }
+        
+        // Entity filtering
+        document.getElementById('entityFilter').addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        // Method filtering
+        document.getElementById('methodFilter').addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        function applyFilters() {
+            const selectedEntity = document.getElementById('entityFilter').value;
+            const selectedMethod = document.getElementById('methodFilter').value;
+            
+            const entityGroups = document.querySelectorAll('.entity-group');
+            const entityTitles = document.querySelectorAll('.entity-title');
+            const endpoints = document.querySelectorAll('.endpoint');
+            
+            // First, handle entity filtering
+            if (selectedEntity === 'all') {
+                entityGroups.forEach(group => group.classList.remove('hidden'));
+                entityTitles.forEach(title => title.classList.remove('hidden'));
+            } else {
+                entityGroups.forEach(group => {
+                    if (group.dataset.entity === selectedEntity) {
+                        group.classList.remove('hidden');
+                    } else {
+                        group.classList.add('hidden');
+                    }
+                });
+                
+                entityTitles.forEach(title => {
+                    if (title.id === `entity-${selectedEntity}`) {
+                        title.classList.remove('hidden');
+                    } else {
+                        title.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Then, handle method filtering
+            if (selectedMethod !== 'all') {
+                endpoints.forEach(endpoint => {
+                    if (endpoint.dataset.method === selectedMethod) {
+                        endpoint.classList.remove('hidden');
+                    } else {
+                        endpoint.classList.add('hidden');
+                    }
+                });
+            } else {
+                endpoints.forEach(endpoint => endpoint.classList.remove('hidden'));
+            }
+            
+            // Update endpoint counters
+            updateEndpointCounters();
+        }
+        
+        function updateEndpointCounters() {
+            const entityGroups = document.querySelectorAll('.entity-group:not(.hidden)');
+            
+            entityGroups.forEach(group => {
+                const entityName = group.dataset.entity;
+                const visibleEndpoints = group.querySelectorAll('.endpoint:not(.hidden)').length;
+                const counterElement = document.querySelector(`#entity-${entityName} .endpoint-counter`);
+                
+                if (counterElement) {
+                    counterElement.textContent = `(${visibleEndpoints} endpoints)`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
