@@ -72,11 +72,14 @@ const EditPlaceScreen = ({ route, navigation }) => {
   });
 
   const steps = [
-    { title: 'Informations de base', component: BasicInfoStep },
-    { title: 'Localisation', component: LocationStep },
+    { title: 'Informations de base', component: BasicInfoStep ,
+ },
+    { title: 'Localisation', component: LocationStep,
+ },
     { title: 'Images', component: ImageUploadStep },
-    { title: 'Détails', component: DetailsStep },
-    { title: 'Résumé', component: SummaryStep },
+    { title: 'Détails', component: DetailsStep , },
+    { title: 'Résumé', component: SummaryStep ,
+ },
   ];
 
   const handleUpdateField = (fieldName, value) => {
@@ -166,6 +169,7 @@ const EditPlaceScreen = ({ route, navigation }) => {
   };
 
   const CurrentStepComponent = steps[currentStep].component;
+//const currentProps = steps[currentStep].props;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,6 +197,7 @@ const EditPlaceScreen = ({ route, navigation }) => {
           <CurrentStepComponent 
             formData={formData}
             updateField={handleUpdateField}
+           setFormData={setFormData}
           />
           
           {error && (

@@ -107,7 +107,6 @@ export const ReviewService = {
 
   // Update a review
   updateReview: async (id, reviewData) => {
-    console.log(reviewData)
     try {
       const response = await fetch(getApiUrl(ENDPOINTS.UPDATE_REVIEW(id)), {
         method: "PUT",

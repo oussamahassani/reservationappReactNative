@@ -105,7 +105,7 @@ exports.eventValidation = [
   
   body("description")
     .notEmpty().withMessage("Description is required")
-    .isLength({ min: 10 }).withMessage("Description must be at least 10 characters long"),
+    .isLength({ min: 5 }).withMessage("Description must be at least 10 characters long"),
   
   body("startDate")
     .notEmpty().withMessage("Start date is required")

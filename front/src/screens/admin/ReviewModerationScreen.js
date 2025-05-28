@@ -32,7 +32,6 @@ export default function ReviewModerationScreen({ navigation }) {
   const fetchReviews = async () => {
     try {
       const data = await getAllReviews();
-      console.log(data);
       setReviews(data);
     } catch (err) {
       Alert.alert("Erreur", "Impossible de charger les avis.");

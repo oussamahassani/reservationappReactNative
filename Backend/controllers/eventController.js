@@ -41,7 +41,25 @@ exports.getAllEvents = async (req, res) => {
     });
   }
 };
-
+exports.getAllEventsAccpetedByAdmin= async (req, res) => {
+  try {
+    const events = await Event.getAll({...req.query , status:"completed"});
+    res.status(200).json({
+      status: 200,
+      data: events,
+      count: events.length,
+      message: "Events retrieved successfully",
+      filters: req.query
+    });
+  } catch (error) {
+    console.error("Error retrieving events:", error);
+    res.status(500).json({ 
+      status: 500,
+      message: error.message,
+      error: "Failed to retrieve events"
+    });
+  }
+};
 /**
  * Get event by ID
  * @route GET /api/events/:id
@@ -144,6 +162,7 @@ exports.createEvent = async (req, res) => {
 exports.updateEvent = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+        console.log(errors)
     return res.status(400).json({ 
       status: 400,
       errors: errors.array(),

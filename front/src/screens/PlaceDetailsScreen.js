@@ -172,7 +172,6 @@ const PlaceDetailsScreen = ({ route, navigation }) => {
     setReservationError(null);
 
     try {
-      console.log(user);
       const reservationPayload = {
         userId: user.id,
         placeId: reservationData.event
@@ -185,7 +184,6 @@ const PlaceDetailsScreen = ({ route, navigation }) => {
         paymentMethod: "nothing",
         paymentId: "nothing",
       };
-      console.log(reservationPayload);
       const result = await ReservationService.createReservation(
         reservationPayload
       );

@@ -57,7 +57,6 @@ const ReviewManagementScreen = ({ navigation }) => {
       setLoading(true);
       const data = await getAllReviews();
       setReviews(data);
-      console.log(data);
     } catch (error) {
       console.error("Erreur de chargement des avis:", error);
     } finally {

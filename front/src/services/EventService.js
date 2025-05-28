@@ -1,6 +1,29 @@
 import { API_URL, ENDPOINTS, getApiUrl } from "../config/apiConfig";
 
 export const EventService = {
+  getAllEventsUser: async () => {
+    try {
+      const response = await fetch(getApiUrl(`${ENDPOINTS.EVENTS}/accepted`));
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(" HTTP error body:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const text = await response.text();
+      if (!text) {
+        console.warn(" Empty response body");
+        return { data: [], count: 0 };
+      }
+
+      const result = JSON.parse(text);
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      throw error;
+    }
+  },
   getAllEvents: async () => {
     try {
       const response = await fetch(getApiUrl(ENDPOINTS.EVENTS));
@@ -132,6 +155,7 @@ export const EventService = {
 
 // Create aliases for easier imports
 export const getAllEvents = EventService.getAllEvents;
+export const  getAllEventsUser = EventService.getAllEventsUser;
 export const getEventsByPlace = EventService.getEventsByPlace;
 export const getEventById = EventService.getEventById;
 export const createEvent = EventService.createEvent;

@@ -19,7 +19,7 @@ const SummaryStep = ({ formData }) => {
     formData.entranceFee.adult === 0 && 
     formData.entranceFee.child === 0 && 
     formData.entranceFee.student === 0;
-
+console.log(formData.images)
   return (
     <View style={styles.container}>
       <Text style={styles.stepTitle}>Résumé</Text>
@@ -70,7 +70,7 @@ const SummaryStep = ({ formData }) => {
             </View>
             
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {formData.images.map((image, index) => (
+              {formData.images && formData.images.map((image, index) => (
                 <Image
                   key={index}
                   source={{ uri: image }}

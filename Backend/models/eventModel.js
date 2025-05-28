@@ -163,7 +163,7 @@ const Event = {
   },
 
   async update(id, updates) {
-    if (updates.status && !["ongoing", "cancel"].includes(updates.status)) {
+    if (updates.status && !["ongoing", "cancel","completed"].includes(updates.status)) {
       throw new Error("Invalid status value. Must be 'ongoing' or 'cancel'");
     }
 

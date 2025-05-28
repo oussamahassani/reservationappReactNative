@@ -58,13 +58,14 @@ const ReservationManagementScreen = ({ navigation }) => {
               .padStart(2, "0")}`;
 
         if (grouped[res.status]) {
+          let user = res.firstName ? res.firstName + ' ' +   res?.lastName : "Utilisateur"
           grouped[res.status].push({
             id: res.id,
-            name: res.userName || "Utilisateur",
+            name: user,
             date: formattedDate,
             time: "--:--",
             people: res.numberOfPersons || res.numberOfTickets || 1,
-            contact: res.userPhone || "N/A",
+            contact: res.phone || "N/A",
           });
         }
       });
@@ -84,7 +85,10 @@ const ReservationManagementScreen = ({ navigation }) => {
     }
   };
 
-  const renderReservationItem = ({ item }) => (
+  const renderReservationItem = ({ item }) => {
+    return (
+    
+
     <Animatable.View
       animation="fadeIn"
       duration={500}
@@ -146,6 +150,7 @@ const ReservationManagementScreen = ({ navigation }) => {
       )}
     </Animatable.View>
   );
+}
 
   return (
     <SafeAreaView style={styles.container}>

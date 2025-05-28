@@ -96,7 +96,6 @@ export default function UserManagementScreen({ navigation }) {
 
   const ToggleUserStatus = async (item) => {
     try {
-      console.log(item);
       const response = await fetch(
         `${API_URL}${ENDPOINTS.USER_BY_ID(item && item.id)}`,
         {

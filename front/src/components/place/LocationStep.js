@@ -16,7 +16,7 @@ import MapView, { Marker } from 'react-native-maps';
 const LocationStep = ({ formData, setFormData }) => {
   const [mapRegion, setMapRegion] = useState(null);
   const { userLocation } = useLocationPermission();
-
+console.log(setFormData)
   // Initialize from existing formData or user location
   useEffect(() => {
     // Case 1: Use existing form data if available

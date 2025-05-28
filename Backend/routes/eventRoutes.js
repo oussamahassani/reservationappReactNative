@@ -17,6 +17,8 @@ const {
   getUpcomingEvents,
   getEventsByPlace,
   getEventsByProvider,
+
+  getAllEventsAccpetedByAdmin
 } = require("../controllers/eventController");
 const { eventValidation, idValidation } = require("../middleware/validate");
 
@@ -38,6 +40,7 @@ const { eventValidation, idValidation } = require("../middleware/validate");
  */
 router.get("/", getAllEvents);
 
+router.get("/accepted", getAllEventsAccpetedByAdmin);
 /**
  * @route   GET /api/events/upcoming
  * @desc    Get upcoming events
@@ -64,6 +67,7 @@ router.get("/:id", idValidation, getEventById);
  * @returns Array of events for the place
  */
 router.get("/place/:placeId", getEventsByPlace);
+
 
 /**
  * @route   GET /api/events/provider/:providerId

@@ -70,7 +70,7 @@ const PlaceReviewsScreen = ({ route, navigation }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        getApiUrl(ENDPOINTS.REVIEWS_BY_PLACE(placeId))
+        getApiUrl(`${ENDPOINTS.REVIEWS_BY_PLACE(placeId)}`)
       );
 
       if (!response.ok) {
@@ -83,6 +83,8 @@ const PlaceReviewsScreen = ({ route, navigation }) => {
       if (data && data.status === 200) {
         // Handle the new nested structure where reviews are in data.data.reviews
         if (data.data && data.data.reviews) {
+          console.log(user)
+         data.data.reviews = data.data.reviews.filter(el => el.status =='approved' || el.userId ==user.id)
           setReviews(Array.isArray(data.data.reviews) ? data.data.reviews : []);
 
           // Use the provided average rating if available

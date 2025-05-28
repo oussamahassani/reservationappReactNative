@@ -93,15 +93,15 @@ export default function EventManagementScreen({ navigation }) {
         place_id: originalEvent.place_id,
         provider_id: originalEvent.provider_id,
         images: originalEvent.images || [],
-        status: "ongoing",
+        status: "completed",
       };
       console.log(originalEvent);
 
       await EventService.updateEvent(id, updatedEvent);
       await fetchEvents();
-      console.log("Événement annulé avec succès");
+      console.log("Événement updated avec succès");
     } catch (error) {
-      console.error("Échec de l’annulation de l’événement :", error);
+      console.error("Échec de updated de l’événement :", error);
     }
   };
 
@@ -204,9 +204,9 @@ export default function EventManagementScreen({ navigation }) {
                 styles.statusBadge,
                 {
                   backgroundColor:
-                    item.status === "ongoing"
+                    item.status === "completed"
                       ? "#E8F5E9"
-                      : item.status === "pending"
+                      : item.status === "ongoing"
                       ? "#FFF9C4"
                       : "#FFEBEE",
                 },
@@ -217,17 +217,17 @@ export default function EventManagementScreen({ navigation }) {
                   styles.statusText,
                   {
                     color:
-                      item.status === "ongoing"
+                      item.status === "completed"
                         ? "#2E7D32"
-                        : item.status === "pending"
+                        : item.status === "ongoing"
                         ? "#F57F17"
                         : "#C62828",
                   },
                 ]}
               >
-                {item.status === "ongoing"
+                {item.status === "completed"
                   ? "Approuvé"
-                  : item.status === "pending"
+                  : item.status === "ongoing"
                   ? "En attente"
                   : "Rejeté"}
               </Text>

@@ -11,10 +11,14 @@ export const useClerkIntegration = () => {
   const { login, logout } = useAuth();
 
   // When Clerk auth state changes, sync with our system
-  useEffect(() => {
+  useEffect( () => {
     if (isSignedIn && clerkUser) {
       handleClerkUserSync();
+             handleCompleteLogout();
+
     }
+
+
   }, [isSignedIn, clerkUser]);
 
   const handleClerkUserSync = async () => {
@@ -26,7 +30,7 @@ export const useClerkIntegration = () => {
 
       // Simplified login without password check
       try {
-        await login(userData.email, 'simple-password');
+        await login(userData.email, 'simple-password' , 'googel');
         console.log('Clerk user logged in successfully');
       } catch (error) {
         console.error('Error syncing Clerk user:', error);

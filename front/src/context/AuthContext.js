@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password , typeAuth=null) => {
     setLoading(true);
     setError(null);
           console.error(`${API_URL}${ENDPOINTS.LOGIN}`);
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password , typeAuth }),
       });
 
       const result = await response.json();

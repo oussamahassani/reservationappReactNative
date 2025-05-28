@@ -40,7 +40,7 @@ const ConversationsListScreen = ({ navigation }) => {
       }
 
       const response = await MessagingService.listConversations(user.id);
-      console.log(response);
+    
       if (response?.data && Array.isArray(response.data)) {
         setConversations(response.data);
       } else {

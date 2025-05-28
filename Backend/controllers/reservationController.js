@@ -22,6 +22,7 @@ const transporter = nodemailer.createTransport({
 // Get all reservations
 exports.getAllReservations = async (req, res) => {
   try {
+    console.log(req.query)
     const reservations = await Reservation.getAll(req.query);
     res.status(200).json({
       success: true,
@@ -147,7 +148,6 @@ exports.createReservation = async (req, res) => {
     const reservation = await Reservation.getById(reservationId);
     const user = await User.findById(reservationData.userId);
     const userEmail = user?.email;
-    console.log(reservation.eventId);
 
     res.status(201).json({
       success: true,
@@ -183,7 +183,6 @@ exports.updateReservation = async (req, res) => {
         message: "Reservation not found",
       });
     }
-console.log(req.body)
     const user = await User.findById(reservation.userId);
         const userEmail = user?.email;
 if(req.body != null && req.body.status !="rappler"){

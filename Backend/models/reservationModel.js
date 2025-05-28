@@ -3,7 +3,7 @@ const db = require("../config/db");
 class Reservation {
   // Get all reservations with optional filters
   static async getAll(filters = {}) {
-    let query = "SELECT * FROM reservations WHERE 1=1";
+    let query = "SELECT rv.*, u.firstName , u.lastName , u.phone FROM reservations  rv Left JOIN users u ON rv.userId  = u.id WHERE 1=1";
     const params = [];
 
     // Filter by user

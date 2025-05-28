@@ -15,7 +15,7 @@ import { ArrowLeft } from "lucide-react-native";
 import EventSearchHeader from "../components/events/EventSearchHeader";
 import EventFilters from "../components/events/EventFilters";
 import { FooterNav } from "../components/FooterNav";
-import { getAllEvents } from "../services/EventService";
+import { getAllEventsUser } from "../services/EventService";
 import { COLORS } from "../theme/colors";
 import { SPACING } from "../theme/spacing";
 import { FONT_SIZE } from "../theme/typography";
@@ -66,7 +66,7 @@ const EventsScreen = ({ navigation }) => {
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const data = await getAllEvents();
+      const data = await getAllEventsUser();
 
       setEvents(data || []);
       setLoading(false);
@@ -190,7 +190,7 @@ const EventsScreen = ({ navigation }) => {
           eventId: item.id,
           placeId: item.place?.id,
         });
-        console.log(item);
+      
       }}
     >
       <View style={styles.eventHeader}>
