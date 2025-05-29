@@ -1,4 +1,5 @@
 const Place = require("../models/placeModel");
+const PlaceArchive = require("../models/placeModelArchive");
 const { validationResult } = require("express-validator");
 
 exports.getAllPlaces = async (req, res) => {
@@ -127,16 +128,20 @@ exports.createPlace = async (req, res) => {
 
 exports.updatePlace = async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  console.log(req.body)
+  console.log(errors)
 
+  /*if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }*/
   try {
     const place = await Place.getById(req.params.id);
     if (!place) {
       return res.status(404).json({ message: "Place not found" });
     }
-
+ if(req.body.isActive ==false){
+  PlaceArchive.create(place)
+ }
     await Place.update(req.params.id, req.body);
     
     const updatedPlace = await Place.getById(req.params.id);

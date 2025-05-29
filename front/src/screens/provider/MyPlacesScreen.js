@@ -54,10 +54,14 @@ const MyPlacesScreen = ({ navigation }) => {
       const grouped = { active: [], inactive: [] };
 
       places.forEach((p) => {
-        if (p.isActive) grouped.active.push(p);
-        else grouped.inactive.push(p);
+        if (p.isActive){
+grouped.active.push(p);
+        } 
+        else {
+          grouped.inactive.push(p);
+        }
       });
-
+console.log(grouped.active)
       setGroupedPlaces(grouped);
     } catch (err) {
       setError(err.message);
