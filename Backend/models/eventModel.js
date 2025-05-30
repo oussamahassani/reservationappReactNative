@@ -56,7 +56,15 @@ const Event = {
         query += " AND e.endDate <= ?";
         params.push(filters.endDate);
       }
+if (filters.created_at_from) {
+    query += " AND e.createdAt >= ?";
+    params.push(filters.created_at_from);
+  }
 
+  if (filters.created_at_to) {
+    query += " AND e.createdAt <= ?";
+    params.push(filters.created_at_to);
+  }
       const sortField = filters.sortBy || "startDate";
       const sortOrder =
         filters.sortOrder?.toUpperCase() === "DESC" ? "DESC" : "ASC";

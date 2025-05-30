@@ -23,7 +23,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const promotionRoutes = require("./routes/promotionRoutes");
 const messagerieRoutes = require("./routes/messagerieRoutes");
 const passwordRoutes = require("./routes/passwordRoutes");
-
+const notification = require("./notification/notification")
 // Middleware de journalisation des requêtes
 const requestLogger = require("./middleware/requestLogger");
 
@@ -74,8 +74,8 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/promotions", promotionRoutes);
 app.use("/api/messagerie", messagerieRoutes);
 app.use("/api/password", passwordRoutes);
-
 // Route d'accueil
+
 app.get("/", (req, res) => {
   res.send(`
     <html>
@@ -110,7 +110,8 @@ app.use((req, res) => {
 
 // Définir le port
 const PORT = process.env.PORT || 3000;
-
+console.log("test test")
+  notification.start();
 // Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`

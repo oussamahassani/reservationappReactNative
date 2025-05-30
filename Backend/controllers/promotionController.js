@@ -71,14 +71,15 @@ exports.createPromotion = async (req, res) => {
 
     // Vérifier si le lieu existe
     const place = await Place.getById(promotionData.place_id);
+
     const user = await User.findById(promotionData.created_by);
-    if (!place) {
+   /* if (!place) {
       return res.status(404).json({
         status: 404,
         message: "Lieu non trouvé",
       });
     }
-
+*/
     // Si l'utilisateur est un fournisseur, vérifier s'il est propriétaire du lieu
     // if (user.role === "provider") {
     //   if (place.provider_id !== user.id) {
@@ -98,6 +99,7 @@ exports.createPromotion = async (req, res) => {
       data: promotion,
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json({
       status: 400,
       message: error.message,
@@ -108,14 +110,7 @@ exports.createPromotion = async (req, res) => {
 
 // Mettre à jour une promotion
 exports.updatePromotion = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      status: 400,
-      errors: errors.array(),
-    });
-  }
-
+ 
   try {
     // Vérifier si la promotion existe
 
@@ -150,6 +145,27 @@ exports.updatePromotion = async (req, res) => {
     //   });
     // }
 
+    if(req.body.start_date){
+const start_date = new Date(req.body.start_date)
+  .toISOString()
+  .slice(0, 19)
+  .replace('T', ' '); 
+  req.body.start_date = start_date
+
+    }
+    if(req.body.end_date){
+const end_date = new Date(req.body.end_date)
+  .toISOString()
+  .slice(0, 19)
+  .replace('T', ' '); 
+req.body.end_date = end_date
+    }
+    if(req.body.created_at){
+      delete req.body.created_at ;
+    }
+        if(req.body.updated_at){
+      delete req.body.updated_at ;
+    }
     await Promotion.update(req.params.id, req.body);
 
     const updatedPromotion = await Promotion.getById(req.params.id);
@@ -159,6 +175,8 @@ exports.updatePromotion = async (req, res) => {
       data: updatedPromotion,
     });
   } catch (error) {
+      console.log(error)
+
     res.status(400).json({
       status: 400,
       message: error.message,

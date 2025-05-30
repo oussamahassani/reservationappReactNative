@@ -16,6 +16,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors/safe');
+const notification = require("./notification/notification")
 
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
@@ -80,7 +81,8 @@ app.use((req, res) => {
 
 // Configuration du port d'écoute
 const PORT = process.env.PORT || 3000;
-
+console.log("test test")
+  notification.start();
 // Démarrage du serveur
 app.listen(PORT, () => {
   console.log(`

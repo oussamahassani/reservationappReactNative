@@ -18,17 +18,30 @@ class Promotion {
       query += " AND created_by = ?";
       params.push(filters.created_by);
     }
+if (filters.created_at_from) {
+    query += " AND created_at >= ?";
+    params.push(filters.created_at_from);
+  }
 
+  if (filters.created_at_to) {
+    query += " AND created_at <= ?";
+    params.push(filters.created_at_to);
+  }
     // Filtre des promotions actives
-    if (filters.active) {
+    if ( filters.active) {
       const now = new Date().toISOString().slice(0, 10);
       query += " AND start_date <= ? AND end_date >= ?";
       params.push(now, now);
+    }
+     if ( filters.isactive) {
+ query += " AND active = ?";
+    params.push(filters.isactive);
     }
 
     // Tri par date de début (décroissant)
     query += " ORDER BY start_date DESC";
 
+    console.log(query,params)
     const [rows] = await db.query(query, params);
     return rows;
   }

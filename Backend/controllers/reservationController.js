@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator");
 const User = require("../models/userModel");
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
+/*const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   secure: false, // true for other ports
@@ -18,7 +18,15 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
 });
-
+*/
+var transporter = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "a1632d046d7b6c",
+    pass: "a3a35905556a11"
+  }
+});
 // Get all reservations
 exports.getAllReservations = async (req, res) => {
   try {
@@ -223,8 +231,9 @@ if(req.body.status =="rappler")
         // Optionally continue without blocking the main response
       }
 }
+console.log(req.body)
     const updatedReservation = await Reservation.getById(req.params.id);
-    if (userEmail && reservation.reservation && req.body.status  && req.body.status=="confirmed") {
+    if (userEmail && reservation && req.body.status  && req.body.status=="confirmed") {
       const mailOptions = reservation.eventId
         ? {
             from: `"JendoubaLife Reservations" <${process.env.SENDER_EMAIL}>`,

@@ -63,7 +63,7 @@ router.post("/", promotionValidation, createPromotion);
  * @body    Updated promotion data
  * @returns Updated promotion data
  */
-router.put("/:id", idValidation, promotionValidation, updatePromotion);
+router.put("/:id", idValidation, updatePromotion);
 
 /**
  * @route   DELETE /api/promotions/:id

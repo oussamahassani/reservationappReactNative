@@ -268,6 +268,11 @@ export default function SignupScreen({ navigation }) {
   ];
 
   const validateStep = (step) => {
+    const validEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com']; // Add more if needed
+
+const emailParts = email.split('@');
+const domain = emailParts[1];
     switch (step) {
       case 0:
         if (!firstName.trim() || !lastName.trim()) {
@@ -286,13 +291,14 @@ export default function SignupScreen({ navigation }) {
           );
           return false;
         }
-        if (!/\S+@\S+\.\S+/.test(email)) {
-          Alert.alert(
-            t("common.error") || "Erreur",
-            t("signup.invalidEmail") || "Veuillez saisir un email valide"
-          );
-          return false;
-        }
+        if (!validEmailPattern.test(email) || !allowedDomains.includes(domain)) {
+  Alert.alert(
+    t("common.error") || "Erreur",
+    t("signup.invalidEmail") || "Veuillez saisir un email valide (ex: nom@gmail.com)"
+  );
+  return false;
+}
+     
         return true;
       case 2:
         if (!password.trim() || !confirmPassword.trim()) {
